@@ -9,9 +9,20 @@
 #define symbol_layer   1
 #define mouse_layer    2
 #define function_layer 3
+#define gaming_layer      4
+#define macos_flag_layer  5
+#define macos_layer       6
 
 
 / {
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        macos {
+            if-layers = <symbol_layer macos_flag_layer>;
+            then-layer = <macos_layer>;
+        };
+    };
+
     combos {
         compatible = "zmk,combos";
         combo_dsklg {
@@ -76,19 +87,18 @@
 38|         |   UNDO   |   CUT    |   COPY   |  PASTE   |     |         |    |          | Mute      |Pg Dwn|             |          |   {     |   }     |
 52|                                       LGUI | LALT | Fn Layer | RET  |    |  SPACE | Fn Layer |   RALT | LGUI                                    |
    ---------------------------------------------------------------------|    |---------------------------------------------------------------------------
-   
-Future: MacOS does not recognize K_UNDO, K_CUT, K_COPY, K_PASTE. Objective is
-   to have same key patterns regardless of OS (e.g,. Arrow-C to copy).
 
-   A future iteration will move these back to the K_COPY, etc. and then create
-   a toggled higher layer for MacOS mappings  LG(X), LG(C), LG(V), etc
+   Clipboard keys (SELECT, SAVE, UNDO, CUT, COPY, PASTE) use Ctrl equivalents
+   (LC) as the OS-agnostic default (Linux/Windows). When MacOS layer is toggled
+   on via Function + M, those same positions are overridden with Cmd equivalents
+   (LG) for macOS.
    */
 
             bindings = <
    &kp TILDE &kp F1     &kp F2     &kp F3     &kp F4      &kp F5                         &kp F6      &kp F7     &kp F8    &kp F9     &kp F10   &kp PLUS
    &kp GRAVE &trans     &kp HOME   &trans     &kp END     &trans                         &trans      &kp PG_UP  &kp INS   &trans     &kp PSCRN &kp EQUAL
-   &kp CLCK  &kp LG(A)     &kp LG(S)  &trans     &trans      &trans  &trans      &trans     &kp LEFT    &kp DOWN   &kp UP    &kp RIGHT  &kp LBKT  &kp RBKT
-   &trans    &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(V)   &trans  &trans      &trans     &kp C_MUTE  &kp PG_DN  &trans    &trans     &kp LBRC  &kp RBRC
+   &kp CLCK  &kp LC(A)     &kp LC(S)  &trans     &trans      &trans  &trans      &trans     &kp LEFT    &kp DOWN   &kp UP    &kp RIGHT  &kp LBKT  &kp RBKT
+   &trans    &kp LC(Z)  &kp LC(X)  &kp LC(C)  &kp LC(V)   &trans  &trans      &trans     &kp C_MUTE  &kp PG_DN  &trans    &trans     &kp LBRC  &kp RBRC
                                  &trans   &trans &mo function_layer  &trans    &trans    &mo function_layer &trans     &trans
             >;
 
@@ -139,8 +149,8 @@ Right:
  0|   OUT_TOG    |   OUT_USB  |  Out BLE   |            | Reset      | Bootloader   |
 12|              |            |            |            |            |              |
 24|   [knob]     |            |            |            |            |              |
-38|              |            |            |            |            |              |
-52|              |            |            |            |            |              |              
+38|              |            | Mac Toggle |            |            |              |
+52|              |            |            |            |            |              |
 ------------------------------------------------------------------------------------|
 */
            
@@ -157,10 +167,51 @@ Right:
    &trans         &trans       &trans       &trans       &trans       &trans        &trans
    
    &trans         &trans       &trans       &trans       &trans       &trans        &trans
-   &trans         &trans       &trans       &trans       &trans       &trans        &trans
+   &trans         &trans       &tog macos_flag_layer &trans &trans      &trans        &trans
 
    &trans        &trans      &trans      &trans
    &trans        &trans      &trans      &trans
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp PG_UP PG_DN>;
+        };
+
+        macos_flag_layer {
+            display-name = "MacOS";
+
+/* Marker layer — all transparent. Toggled on/off via Function + M.
+   When active simultaneously with symbol_layer, triggers macos_layer
+   via conditional_layers to override clipboard keys with Cmd equivalents.
+*/
+
+            bindings = <
+   &trans &trans &trans &trans &trans &trans               &trans &trans &trans &trans &trans &trans
+   &trans &trans &trans &trans &trans &trans               &trans &trans &trans &trans &trans &trans
+   &trans &trans &trans &trans &trans &trans &trans        &trans &trans &trans &trans &trans &trans &trans
+   &trans &trans &trans &trans &trans &trans &trans        &trans &trans &trans &trans &trans &trans &trans
+                        &trans &trans &trans &trans        &trans &trans &trans &trans
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp PG_UP PG_DN>;
+        };
+
+        macos_layer {
+            display-name = "Mac+Sym";
+
+/* Conditional layer — activates only when both symbol_layer and
+   macos_flag_layer are active. Overrides clipboard/editing keys
+   with macOS Cmd equivalents at the same positions as symbol_layer.
+
+   Row 24: SELECT (Cmd+A), SAVE (Cmd+S)
+   Row 38: UNDO (Cmd+Z), CUT (Cmd+X), COPY (Cmd+C), PASTE (Cmd+V)
+*/
+
+            bindings = <
+   &trans &trans    &trans    &trans    &trans    &trans               &trans &trans &trans &trans &trans &trans
+   &trans &trans    &trans    &trans    &trans    &trans               &trans &trans &trans &trans &trans &trans
+   &trans &kp LG(A) &kp LG(S) &trans    &trans    &trans &trans        &trans &trans &trans &trans &trans &trans &trans
+   &trans &kp LG(Z) &kp LG(X) &kp LG(C) &kp LG(V) &trans &trans      &trans &trans &trans &trans &trans &trans &trans
+                          &trans &trans &trans &trans                  &trans &trans &trans &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp PG_UP PG_DN>;
