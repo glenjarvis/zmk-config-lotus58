@@ -5,13 +5,12 @@
 #include <dt-bindings/zmk/pointing.h>
 
 
-#define default_layer  0
-#define symbol_layer   1
-#define mouse_layer    2
-#define function_layer 3
-#define gaming_layer      4
-#define macos_flag_layer  5
-#define macos_layer       6
+#define default_layer     0
+#define symbol_layer      1
+#define mouse_layer       2
+#define function_layer    3
+#define macos_flag_layer  4
+#define macos_layer       5
 
 
 / {
