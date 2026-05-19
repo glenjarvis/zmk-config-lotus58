@@ -39,6 +39,13 @@
             bindings = <&kp N4>, <&kp F4>;
             mods = <(MOD_LALT|MOD_RALT)>;
         };
+        sqt_rshft: sqt_rshft {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&kp>, <&kp>;
+        };
         sleft: s_left {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
@@ -68,7 +75,7 @@
             bindings = <
    &kp ESC   &kp N1 &kp N2 &kp N3 &fofunc &kp N5                                          &kp N6  &kp N7 &kp N8    &kp N9  &kp N0   &kp MINUS
    &kp TAB   &kp Q  &kp W  &kp E  &kp R   &kp T                                           &kp Y   &kp U  &kp I     &kp O   &kp P    &kp BSPC
-   &kp LSHFT &kp A  &sleft &kp D  &fright &kp G   &trans               &kp C_MUTE         &kp H   &kp J  &kp K     &kp L   &kp SEMI &mt RSHFT SQT
+   &kp LSHFT &kp A  &sleft &kp D  &fright &kp G   &trans               &kp C_MUTE         &kp H   &kp J  &kp K     &kp L   &kp SEMI &sqt_rshft RSHFT SQT
    &kp LCTRL &kp Z  &kp X  &kp C  &kp V   &kp B   &mo mouse_layer    &mo function_layer  &kp N   &kp M  &kp COMMA &kp DOT &kp FSLH &mt RCTRL BSLH
               &kp LGUI &kp LALT  &mo symbol_layer &kp RET            &kp SPACE &mo symbol_layer &kp RALT &kp LGUI
             >;
@@ -110,19 +117,19 @@
 
 /* --------------------------------------------------|    |---------------------------------------------------------------------------------------|
  0|      |      |      |      |      |     |         |    |         |            |              |             |               |         |         |
-12|      |      |      |      |      |     |         |    |         | M Scroll Up|              |             |               |         |         |
-24|      |      |      |      |      |     |ink-disp |    | [knob]  | Mouse Left |M Down        |   Mouse Up  | M Right       |         |         |
-38|      |      |      |      |      |     |         |    |         | M Scroll Dn|              |             |               |         |         |
+12|      |      |      |      |      |     |         |    |         |            | M Scroll Up  |             |               |         |         |
+24|      |      |      |      |      |     |ink-disp |    | [knob]  | Mouse Left | M Down       |   Mouse Up  | M Right       |         |         |
+38|      |      |      |      |      |     |         |    |         |            | M Scroll Dn  |             |               |         |         |
 52|                                                  |    | LCLICK  |   RCLICK   |                                                                |
    --------------------------------------------------|    |---------------------------------------------------------------------------------------*/
            
 
             bindings = <
-   &trans &trans &trans &trans &trans &trans               &trans    &trans         &trans         &trans        &trans          &trans
-   &trans &trans &trans &trans &trans &trans               &trans    &msc SCRL_UP   &trans         &trans        &trans          &trans
-   &trans &trans &trans &trans &trans &trans &trans        &trans    &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP  &mmv MOVE_RIGHT &trans    &trans
-   &trans &trans &trans &trans &trans &trans &trans        &trans    &msc SCRL_DOWN &trans         &trans        &trans          &trans    &trans
-                        &trans &trans &trans &trans        &mkp LCLK &mkp RCLK      &trans         &trans
+   &trans &trans &trans &trans &trans &trans                         &trans    &trans         &trans         &trans        &trans          &trans
+   &trans &trans &trans &trans &trans &trans                         &trans    &msc SCRL_UP   &trans         &trans        &trans          &trans
+   &trans &trans &trans &trans &trans &trans &trans                  &trans    &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP  &mmv MOVE_RIGHT &trans    &trans
+   &trans &trans &trans &trans &trans &trans &trans        &trans    &trans    &msc SCRL_DOWN &trans        &trans          &trans    &trans
+                        &trans &trans &trans &trans             &mkp LCLK &mkp RCLK      &trans         &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp PG_UP PG_DN>;
@@ -191,7 +198,7 @@ Right:
                         &trans &trans &trans &trans        &trans &trans &trans &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp PG_UP PG_DN>;
+            sensor-bindings = <&inc_dec_kp PG_UP PG_DN &inc_dec_kp C_VOL_DN C_VOL_UP>;
         };
 
         macos_layer {
@@ -217,4 +224,8 @@ Right:
         };
     };
 
+};
+
+&mmv {
+    time-to-max-speed-ms = <700>;
 };
