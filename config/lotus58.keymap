@@ -14,14 +14,14 @@
 
 /*
 Key Caps
-These symbols are used as an when describing different layers below
+These symbols are used when describing different layers below
    ------------------------------------------------------|  |---------------------------------------------------------------|
  0|   ESC   |   1  |   2  |  3   |  4    |   5  |        |  |           |   6   |  7   |    8    |   9   |   0    |   -     |
 12|  BowTie |   Q  |   W  |  E   |  R    |   T  |        |  |           |   Y   |  U   |    I    |   O   |   P    |  DEL    |
 24|  SHIFT  |   A  |   S  |  D   |  F    |   G  |ink-disp|  | [knob]    |   H   |  J   |    K    |   L   |   ;    | Lasso   |
 38|   CTRL  |   Z  |   X  |  C   |  V    |   B  |Glasses |  |  Hat      |   N   |  M   |    ,    |   .   |   /    |   \     |
 52|                          Win | ALT | Triangle |Cane  |  | Tux  | Triangle |   Mustache | FUNC                           |
-   ------------------------------------------------------|  |---------------------------------------------------------------
+   ------------------------------------------------------|  |---------------------------------------------------------------|
 */
 
 
@@ -107,8 +107,7 @@ These symbols are used as an when describing different layers below
 
 /*
   Symbol Layer:
-  Triggered by 
-
+    Triggered by: (When either triangle on default level is held)
 
 
 */
