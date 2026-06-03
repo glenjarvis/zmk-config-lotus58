@@ -12,6 +12,18 @@
 #define macos_flag_layer  4
 #define macos_layer       5
 
+/*
+Key Caps
+These symbols are used when describing different layers below
+   ------------------------------------------------------|  |---------------------------------------------------------------|
+ 0|   ESC   |   1  |   2  |  3   |  4    |   5  |        |  |           |   6   |  7   |    8    |   9   |   0    |   -     |
+12|  BowTie |   Q  |   W  |  E   |  R    |   T  |        |  |           |   Y   |  U   |    I    |   O   |   P    |  DEL    |
+24|  SHIFT  |   A  |   S  |  D   |  F    |   G  |ink-disp|  | [knob]    |   H   |  J   |    K    |   L   |   ;    | Lasso   |
+38|   CTRL  |   Z  |   X  |  C   |  V    |   B  |Glasses |  |  Hat      |   N   |  M   |    ,    |   .   |   /    |   \     |
+52|                          Win | ALT | Triangle |Cane  |  | Tux  | Triangle |   Mustache | FUNC                           |
+   ------------------------------------------------------|  |---------------------------------------------------------------|
+*/
+
 
 / {
     conditional_layers {
@@ -42,21 +54,9 @@
         sqt_rshft: sqt_rshft {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
+            flavor = "balanced";
             tapping-term-ms = <200>;
             bindings = <&kp>, <&kp>;
-        };
-        sleft: s_left {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&kp S>, <&kp LEFT>;
-            mods = <(MOD_LGUI|MOD_RGUI)>;
-        };
-        fright: f_right {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&kp F>, <&kp RIGHT>;
-            mods = <(MOD_LGUI|MOD_RGUI)>;
         };
     };
 
@@ -65,19 +65,38 @@
 
         default_layer {
             display-name = "Default";
-/* ------------------------------------------------------|            |---------------------------------------------------------------|
- 0|   ESC   |   1  |   2  |  3   | 4/F4  |   5  |        |            |                  |   6   |  7   |    8    |   9   |   0    |   -     |
-12|   TAB   |   Q  |   W  |  E   |  R    |   T  |        |            |                  |   Y   |  U   |    I    |   O   |   P    |  BSPC   |
-24|  SHIFT  |   A  |  S/← |  D   | F/→   |   G  |ink-disp|            | [knob]           |   H   |  J   |    K    |   L   |   ;    | ' SFT   |
-38|   CTRL  |   Z  |   X  |  C   |  V    |   B  |Ms Layer|            |  Function Layer  |   N   |  M   |    ,    |   .   |   /    | \ CTRL  |
-52|                     LGUI | LALT | Symbol Layer | RET |            | SPACE            | Symbol Layer |   RALT | LGUI                       |
-   ------------------------------------------------------|            |---------------------------------------------------------------*/
+/*
+  Default Layer:
+  All keys same as keycaps except:
+    First Row:
+      - 4: 4 and F4 (Holding Alt) [four_ffour function]
+    Second Row:
+      - BowTie: Tab [I need to get a TAB keycap]
+
+      - DEL: Backspace key
+    Third Row:
+      - Lasso: Right Shift key and ' key
+    Fourth Row:
+       -  Glasses: Mouse Layer (hold)
+       - Hat: Function Layer (hold) momentary key
+
+       - \: Right Ctrl key and \ key
+    Fifth Row:
+      - Win: Left OS key (e.g., Apple Command Key, Windows key, etc) / LGUI
+      - Triangle: (left side): Symbol Layer key
+      - Cane: Return/Enter
+
+      - Tux: Space
+      - Triangle: (right side): Symbol Layer key
+      - Mustache: Right Alt Key
+      - FUNC: Right OS key (e.g., Apple Command Key, Windows key, etc.) / RGUI
+*/
             bindings = <
    &kp ESC   &kp N1 &kp N2 &kp N3 &fofunc &kp N5                                          &kp N6  &kp N7 &kp N8    &kp N9  &kp N0   &kp MINUS
    &kp TAB   &kp Q  &kp W  &kp E  &kp R   &kp T                                           &kp Y   &kp U  &kp I     &kp O   &kp P    &kp BSPC
-   &kp LSHFT &kp A  &sleft &kp D  &fright &kp G   &trans               &kp C_MUTE         &kp H   &kp J  &kp K     &kp L   &kp SEMI &sqt_rshft RSHFT SQT
+   &kp LSHFT &kp A  &kp S  &kp D  &kp F &kp G   &trans               &kp C_MUTE         &kp H   &kp J  &kp K     &kp L   &kp SEMI &sqt_rshft RSHFT SQT
    &kp LCTRL &kp Z  &kp X  &kp C  &kp V   &kp B   &mo mouse_layer    &mo function_layer  &kp N   &kp M  &kp COMMA &kp DOT &kp FSLH &mt RCTRL BSLH
-              &kp LGUI &kp LALT  &mo symbol_layer &kp RET            &kp SPACE &mo symbol_layer &kp RALT &kp LGUI
+              &kp LGUI &kp LALT  &mo symbol_layer &kp RET            &kp SPACE &mo symbol_layer &kp RALT &kp RGUI
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PG_DN &inc_dec_kp C_VOL_DN C_VOL_UP>;
@@ -86,6 +105,12 @@
         symbol_layer {
             display-name = "Symbol";
 
+/*
+  Symbol Layer:
+    Triggered by: (When either triangle on default level is held)
+
+
+*/
 /* ---------------------------------------------------------------------|    |--------------------------------------------------------------------------|
  0|    ~    |    F1    |   F2     |   F3     |  F4      |  F5 |         |    |          |   F6      |  F7  |      F8     |  F9      |  F10    |   +     |
 12|    `    |          |   HOME   |          |  END     |     |         |    |          |           | Pg Up|     Insert  |          | PSCRN   |   =     |
